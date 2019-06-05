@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="dao"></context:component-scan>
+
+    <bean id="productDao" class="aop.dao.impl.ProductDaoImpl"></bean>
+    <bean id="myAspect" class="aop.MyAspectXML"></bean>
+    <aop:config>
+        <aop:pointcut id="pointcut1" expression="execution(* aop.dao.impl.ProductDaoImpl.select(..))"></aop:pointcut>
+        <aop:pointcut id="point2" expression="execution(* aop.dao.impl.ProductDaoImpl.update(..))"></aop:pointcut>
+        <aop:pointcut id="point3" expression="execution(* aop.dao.impl.ProductDaoImpl.add(..))"></aop:pointcut>
+        <aop:pointcut id="point4" expression="execution(* aop.dao.impl.ProductDaoImpl.del(..))"></aop:pointcut>
+        <aop:pointcut id="p5" expression="execution(* aop.dao.impl.ProductDaoImpl.del(..))"></aop:pointcut>
+        <aop:aspect id="aspect1" ref="myAspect">
+            <aop:before pointcut-ref="pointcut1" method="checkPro"></aop:before>
+            <aop:after-returning method="Logging" pointcut-ref="point2" returning="result"></aop:after-returning>
+            <aop:around method="Round" pointcut-ref="point3"></aop:around>
+            <aop:after-throwing method="afterThrowing" pointcut-ref="point4" throwing="ex"></aop:after-throwing>
+            <aop:after method="after" pointcut-ref="point4"></aop:after>
+        </aop:aspect>
+    </aop:config>
+
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+    <bean id="orderDao" class="demo4.OrderDao"></bean>
+    <bean id="MyAspectAnno" class="demo4.MyAspectAnno"></bean>
+</beans>

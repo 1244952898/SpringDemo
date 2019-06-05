@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="userDao" class="Dao.Impl.UserDaoImpl" >
+        <constructor-arg name="name" value="abc"></constructor-arg>
+    </bean>
+
+    <bean name="customerDao" class="Dao.Impl.CustomerDaoImpl" init-method="SetUp" destroy-method="Close"></bean>
+
+    <bean id="BeanFacStatic" class="Dao.BeanFactoryInstance" factory-method="GetInstanceStatic"></bean>
+
+    <bean id="BeanFacImpl" class="Dao.BeanFactoryInstance"></bean>
+    <bean id="BeanFac" factory-bean="BeanFacImpl" factory-method="GetInstance"></bean>
+
+    <bean id="car" class="Dao.Car">
+        <constructor-arg name="name" value="aa"></constructor-arg>
+        <constructor-arg value="bb" name="price"></constructor-arg>
+    </bean>
+    <bean id="car2" class="Dao.Car2" p:name="abc" p:price="123" p:car-ref="car"></bean>
+
+    <bean id="car_a" class="Dao.Car">
+        <constructor-arg name="name" value="#{'car_name'}"></constructor-arg>
+        <constructor-arg name="price" value="#{'car_p'}"></constructor-arg>
+    </bean>
+    <bean id="car2_a" class="Dao.Car2" p:name="#{'car2_name'}" p:price="#{car_a.GetPrice()}" p:car="#{car_a}"></bean>
+
+    <bean id="collectionBean" class="Classes.CollectionBean">
+        <property name="strings">
+            <list>
+                <value>strings1</value>
+                <value>strings2</value>
+                <value>strings3</value>
+            </list>
+        </property>
+        <property name="stringList">
+            <list>
+                <value>list1</value>
+                <value>list2</value>
+                <value>list3</value>
+            </list>
+        </property>
+        <property name="stringMap">
+            <map>
+                <entry key="1" value="stringMap1"></entry>
+                <entry key="2" value="stringMap2"></entry>
+                <entry key="3" value="stringMap3"></entry>
+            </map>
+        </property>
+        <property name="stringSet">
+            <set>
+                <value>stringSet1</value>
+                <value>stringSet2</value>
+                <value>stringSet3</value>
+            </set>
+        </property>
+    </bean>
+</beans>
